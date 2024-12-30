@@ -154,7 +154,7 @@ RZ_API RzCmdStatus rz_core_asm_plugin_print(RzCore *core, RzAsmPlugin *ap, RzCmd
 		break;
 	}
 	case RZ_OUTPUT_MODE_STANDARD: {
-		rz_cons_printf("%-8s %-10s %-11s %-7s %s",
+		rz_cons_printf("%-8s %-10s %-11s %-10s %s",
 			feat, bits, ap->name, license, ap->desc);
 		if (ap->author) {
 			rz_cons_printf(" (by %s)", ap->author);
@@ -191,8 +191,10 @@ RZ_API RzCmdStatus rz_core_asm_plugins_print(RZ_NONNULL RZ_BORROW RzCore *core, 
 	if (arch) {
 		rz_list_foreach (plugin_list, it, ap) {
 			if (ap->cpus && !strcmp(arch, ap->name)) {
-				snprintf(header, sizeof(header), "CPUs for Arch[%s]:", ap->name);
-				rz_cons_println(header);
+				if(state->mode == RZ_OUTPUT_MODE_STANDARD){
+					snprintf(header, sizeof(header), "CPUs for Arch[%s]:", ap->name);
+					rz_cons_println(header);
+				}
 				char *c = rz_str_dup(ap->cpus);
 				int n = rz_str_split(c, ',');
 				for (i = 0; i < n; i++) {
@@ -201,15 +203,17 @@ RZ_API RzCmdStatus rz_core_asm_plugins_print(RZ_NONNULL RZ_BORROW RzCore *core, 
 				free(c);
 				break;
 			}
-			else if(!strcmp(arch, ap->name)) {
+			else if (!strcmp(arch, ap->name) && state->mode == RZ_OUTPUT_MODE_STANDARD) {
 				snprintf(header, sizeof(header), "NO CPUs for Arch[%s]", ap->name);
 				rz_cons_println(header);
 			}
 		}
 	} else {
 		rz_cmd_state_output_array_start(state);
-		snprintf(header, sizeof(header), "%-8s %-10s %-11s %-10s %s", "Plugins", "Bits", "Arch Name", "License", "Description");
-		rz_cons_println(header);
+		if(state->mode == RZ_OUTPUT_MODE_STANDARD){
+			snprintf(header, sizeof(header), "%-8s %-10s %-11s %-10s %s", "Plugins", "Bits", "Arch Name", "License", "Description");
+			rz_cons_println(header);
+		}
 		rz_list_foreach (plugin_list, it, ap) {
 			const char *license = ap->license
 				? ap->license

@@ -193,7 +193,7 @@ static int rasm_show_help(int v) {
 		"-j",       "",                 "Output in JSON format",
 		"-k",       "[kernel]",         "Select operating system (linux, windows, darwin, ..)",
 		"-l",       "[len]",            "Input/Output length",
-		"-L",       "",                 "List Asm plugins: (a=asm, d=disasm, A=analyze, e=ESIL)",
+		"-L",       "",                 "List Asm plugins: (a=asm, d=disasm, A=analyze, e=ESIL), use -L [arch] to see the CPUs supported for a specific architecture",
 		"-o, -@",   "[addr]",           "Set start address for code (default 0)",
 		"-O",       "[file]",           "Output file name (rz-asm -Bf a.asm -O a)",
 		"-p",       "",                 "Run SPP over input for assembly",
